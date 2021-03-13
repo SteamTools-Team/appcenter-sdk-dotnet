@@ -44,8 +44,9 @@ namespace Microsoft.AppCenter.Utils
         private static Action Minimize;
         private static Action Restore;
         private static Action Start;
-        private static readonly System.Windows.Application WpfApplication;
-        private static readonly System.Windows.WindowState WpfMinimizedState;
+        private static readonly Avalonia.Application AvaloniaApplication;
+        private static readonly Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime AvaloniaApplicationLifetime;
+
         private static void WinEventHook(IntPtr winEventHookHandle, uint eventType, IntPtr windowHandle, int objectId, int childId, uint eventThreadId, uint eventTimeInMilliseconds)
         {
             // Filter out non-HWND
@@ -75,6 +76,14 @@ namespace Microsoft.AppCenter.Utils
 
         static ApplicationLifecycleHelper()
         {
+            var appLifetime = Avalonia.Application.Current.ApplicationLifetime;
+            if (appLifetime is not Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime appLifetime_)
+            {
+                throw new PlatformNotSupportedException();
+            }
+
+            AvaloniaApplicationLifetime = appLifetime_;
+
             // Retrieve the WPF APIs through reflection, if they are available
             //if (WpfHelper.IsRunningOnWpf)
             //{
@@ -83,34 +92,34 @@ namespace Microsoft.AppCenter.Utils
             //var appType = WpfHelper.PresentationFramework.GetType("System.Windows.Application");
             //WpfApplication = appType.GetRuntimeProperty("Current")?.GetValue(appType);
 
-            WpfApplication = System.Windows.Application.Current;
+            AvaloniaApplication = Avalonia.Application.Current;
 
             // Store the int corresponding to the "Minimized" state for WPF Windows
             // This is equivalent to `WpfMinimizedState = (int)System.Windows.WindowState.Minimized;`
             //WpfMinimizedState = (int)WpfHelper.PresentationFramework.GetType("System.Windows.WindowState")
             //    .GetField("Minimized")
             //    .GetRawConstantValue();
-            WpfMinimizedState = System.Windows.WindowState.Minimized;
             //}
 
+
             var hook = SetWinEventHook(EVENT_SYSTEM_MINIMIZESTART, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, hookDelegate, (uint)Process.GetCurrentProcess().Id, 0, WINEVENT_OUTOFCONTEXT);
-            System.Windows.Application.Current.Exit += (_, _) => UnhookWinEvent(hook);
+            appLifetime_.Exit += (_, _) => UnhookWinEvent(hook);
         }
 
         private static bool IsAnyWindowNotMinimized()
         {
             // If not in WPF, query the available forms
-            if (WpfApplication == null)
+            if (AvaloniaApplication == null)
             {
                 throw new PlatformNotSupportedException();
                 //return Application.OpenForms.Cast<Form>().Any(form => form.WindowState != FormWindowState.Minimized);
             }
 
             // If in WPF, query the available windows
-            foreach (System.Windows.Window window in WpfApplication.Windows)
+            foreach (var window in AvaloniaApplicationLifetime.Windows)
             {
                 // Not minimized is true if WindowState is not "Minimized" and the window is on screen
-                if (window.WindowState != WpfMinimizedState && WindowIntersectsWithAnyScreen(window))
+                if (window.WindowState != Avalonia.Controls.WindowState.Minimized && WindowIntersectsWithAnyScreen(window))
                 {
                     return true;
                 }
@@ -173,7 +182,7 @@ namespace Microsoft.AppCenter.Utils
             }
         }
 
-        private static Rectangle WindowsRectToRectangle(System.Windows.Rect windowsRect)
+        private static Rectangle WindowsRectToRectangle(Avalonia.Rect windowsRect)
         {
             return new Rectangle
             {
@@ -184,9 +193,9 @@ namespace Microsoft.AppCenter.Utils
             };
         }
 
-        private static bool WindowIntersectsWithAnyScreen(System.Windows.Window window)
+        private static bool WindowIntersectsWithAnyScreen(Avalonia.Controls.Window window)
         {
-            var windowBounds = WindowsRectToRectangle(window.RestoreBounds);
+            var windowBounds = WindowsRectToRectangle(window.Bounds);
             return Screen.AllScreens.Any(screen => screen.Bounds.IntersectsWith(windowBounds));
         }
 

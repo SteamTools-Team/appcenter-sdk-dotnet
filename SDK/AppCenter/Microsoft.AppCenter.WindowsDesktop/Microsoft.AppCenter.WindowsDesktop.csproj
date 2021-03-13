@@ -6,7 +6,6 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>Microsoft.AppCenter</RootNamespace>
     <!--<UseWindowsForms>true</UseWindowsForms>-->
-    <UseWPF>true</UseWPF>
     <Version>4.1.0-SNAPSHOT</Version>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>4.1.0.0</FileVersion>
@@ -16,12 +15,16 @@
   <Import Project="..\Microsoft.AppCenter.Windows.Shared\Microsoft.AppCenter.Windows.Shared.projitems" Label="Shared" />
   <Import Project="..\Microsoft.AppCenter.Shared\Microsoft.AppCenter.Shared.projitems" Label="Shared" />
   <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.0.4" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net5'))">
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <!--<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
     <PackageReference Include="System.Management" Version="4.6.0" />
