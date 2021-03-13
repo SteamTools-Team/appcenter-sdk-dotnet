@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using System.Collections;
 using System.Drawing;
-using System.Runtime.Versioning;
 using System.Threading;
 using static Interop;
 using PointInt32 = System.Drawing.Point;
@@ -12,7 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a display device or multiple display devices on a single system.
     /// </summary>
-    [SupportedOSPlatform("Windows")]
     internal class Screen
     {
         readonly IntPtr hmonitor;
