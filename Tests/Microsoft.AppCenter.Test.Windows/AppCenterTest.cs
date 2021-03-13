@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Channel;
 using Microsoft.AppCenter.Ingestion.Models;
@@ -32,10 +33,30 @@ namespace Microsoft.AppCenter.Test
                 .Returns(_channelMock.Object);
 
             // Set factories.
-#pragma warning disable 612
-            AppCenter.SetApplicationSettingsFactory(new MockApplicationSettingsFactory(_settingsMock));
-            AppCenter.SetChannelGroupFactory(new MockChannelGroupFactory(_channelGroupMock));
-#pragma warning restore 612
+            SetApplicationSettingsFactory(new MockApplicationSettingsFactory(_settingsMock));
+            SetChannelGroupFactory(new MockChannelGroupFactory(_channelGroupMock));
+        }
+
+        internal static void SetApplicationSettingsFactory(IApplicationSettingsFactory factory)
+        {
+            var typeAppCenter = typeof(AppCenter);
+            var AppCenterLock = typeAppCenter.GetField("AppCenterLock", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            lock (AppCenterLock)
+            {
+                var _channelGroupFactoryField = typeAppCenter.GetField("_applicationSettingsFactory", BindingFlags.NonPublic | BindingFlags.Static);
+                _channelGroupFactoryField.SetValue(null, factory);
+            }
+        }
+
+        internal static void SetChannelGroupFactory(IChannelGroupFactory factory)
+        {
+            var typeAppCenter = typeof(AppCenter);
+            var AppCenterLock = typeAppCenter.GetField("AppCenterLock", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            lock (AppCenterLock)
+            {
+                var _channelGroupFactoryField = typeAppCenter.GetField("_channelGroupFactory", BindingFlags.NonPublic | BindingFlags.Static);
+                _channelGroupFactoryField.SetValue(null, factory);
+            }
         }
 
         [TestCleanup]
@@ -679,7 +700,7 @@ namespace Microsoft.AppCenter.Test
             {
                 AppCenter.GetSecretAndTargetForPlatform(secrets, platformId);
                 Assert.Fail("It should be failed.");
-            } 
+            }
             catch (Exception e)
             {
                 Assert.AreEqual(e.GetType(), typeof(AppCenterException));

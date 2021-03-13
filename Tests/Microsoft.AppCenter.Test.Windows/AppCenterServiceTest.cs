@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Microsoft.AppCenter.Test.Windows
-{    
+{
     [TestClass]
     public class AppCenterServiceTest
     {
@@ -31,9 +31,7 @@ namespace Microsoft.AppCenter.Test.Windows
                         It.IsAny<int>())).Returns(_mockChannel.Object);
 
             AppCenter.Instance = null;
-#pragma warning disable 612
-            AppCenter.SetApplicationSettingsFactory(new MockApplicationSettingsFactory(_mockSettings));
-#pragma warning restore 612
+            AppCenterTest.SetApplicationSettingsFactory(new MockApplicationSettingsFactory(_mockSettings));
         }
 
         /// <summary>

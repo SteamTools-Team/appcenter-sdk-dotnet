@@ -33,7 +33,7 @@ namespace Microsoft.AppCenter
         private const long DefaultStorageMaxSize = 1024 * 1024 * 10;
 
         // The lock is static. Instance methods are not necessarily thread safe, but static methods are
-        private static readonly object AppCenterLock = new object();
+        private static readonly object AppCenterLock = new();
 
         private static IApplicationSettingsFactory _applicationSettingsFactory;
         private static IChannelGroupFactory _channelGroupFactory;
@@ -130,30 +130,6 @@ namespace Microsoft.AppCenter
                 return;
             }
             DeviceInformationHelper.SetCountryCode(countryCode);
-        }
-
-        // This method must be called *before* instance of AppCenter has been created
-        // for a custom application settings to be used.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete]
-        public static void SetApplicationSettingsFactory(IApplicationSettingsFactory factory)
-        {
-            lock (AppCenterLock)
-            {
-                _applicationSettingsFactory = factory;
-            }
-        }
-
-        // This method must be called *before* instance of AppCenter has been created
-        // for a custom application settings to be used.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete]
-        public static void SetChannelGroupFactory(IChannelGroupFactory factory)
-        {
-            lock (AppCenterLock)
-            {
-                _channelGroupFactory = factory;
-            }
         }
 
         static Task<bool> PlatformIsEnabledAsync()

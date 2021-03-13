@@ -44,8 +44,8 @@ namespace Microsoft.AppCenter.Utils
         private static Action Minimize;
         private static Action Restore;
         private static Action Start;
-        private static readonly dynamic WpfApplication;
-        private static readonly int WpfMinimizedState;
+        private static readonly System.Windows.Application WpfApplication;
+        private static readonly System.Windows.WindowState WpfMinimizedState;
         private static void WinEventHook(IntPtr winEventHookHandle, uint eventType, IntPtr windowHandle, int objectId, int childId, uint eventThreadId, uint eventTimeInMilliseconds)
         {
             // Filter out non-HWND
@@ -76,22 +76,25 @@ namespace Microsoft.AppCenter.Utils
         static ApplicationLifecycleHelper()
         {
             // Retrieve the WPF APIs through reflection, if they are available
-            if (WpfHelper.IsRunningOnWpf)
-            {
-                // Store the WPF Application singleton
-                // This is equivalent to `WpfApplication = System.Windows.Application.Current;`
-                var appType = WpfHelper.PresentationFramework.GetType("System.Windows.Application");
-                WpfApplication = appType.GetRuntimeProperty("Current")?.GetValue(appType);
+            //if (WpfHelper.IsRunningOnWpf)
+            //{
+            // Store the WPF Application singleton
+            // This is equivalent to `WpfApplication = System.Windows.Application.Current;`
+            //var appType = WpfHelper.PresentationFramework.GetType("System.Windows.Application");
+            //WpfApplication = appType.GetRuntimeProperty("Current")?.GetValue(appType);
 
-                // Store the int corresponding to the "Minimized" state for WPF Windows
-                // This is equivalent to `WpfMinimizedState = (int)System.Windows.WindowState.Minimized;`
-                WpfMinimizedState = (int)WpfHelper.PresentationFramework.GetType("System.Windows.WindowState")
-                    .GetField("Minimized")
-                    .GetRawConstantValue();
-            }
+            WpfApplication = System.Windows.Application.Current;
+
+            // Store the int corresponding to the "Minimized" state for WPF Windows
+            // This is equivalent to `WpfMinimizedState = (int)System.Windows.WindowState.Minimized;`
+            //WpfMinimizedState = (int)WpfHelper.PresentationFramework.GetType("System.Windows.WindowState")
+            //    .GetField("Minimized")
+            //    .GetRawConstantValue();
+            WpfMinimizedState = System.Windows.WindowState.Minimized;
+            //}
 
             var hook = SetWinEventHook(EVENT_SYSTEM_MINIMIZESTART, EVENT_SYSTEM_MINIMIZEEND, IntPtr.Zero, hookDelegate, (uint)Process.GetCurrentProcess().Id, 0, WINEVENT_OUTOFCONTEXT);
-            Application.ApplicationExit += delegate { UnhookWinEvent(hook); };
+            System.Windows.Application.Current.Exit += (_, _) => UnhookWinEvent(hook);
         }
 
         private static bool IsAnyWindowNotMinimized()
@@ -99,14 +102,15 @@ namespace Microsoft.AppCenter.Utils
             // If not in WPF, query the available forms
             if (WpfApplication == null)
             {
-                return Application.OpenForms.Cast<Form>().Any(form => form.WindowState != FormWindowState.Minimized);
+                throw new PlatformNotSupportedException();
+                //return Application.OpenForms.Cast<Form>().Any(form => form.WindowState != FormWindowState.Minimized);
             }
 
             // If in WPF, query the available windows
-            foreach (var window in WpfApplication.Windows)
+            foreach (System.Windows.Window window in WpfApplication.Windows)
             {
                 // Not minimized is true if WindowState is not "Minimized" and the window is on screen
-                if ((int)window.WindowState != WpfMinimizedState && WindowIntersectsWithAnyScreen(window))
+                if (window.WindowState != WpfMinimizedState && WindowIntersectsWithAnyScreen(window))
                 {
                     return true;
                 }
@@ -169,7 +173,7 @@ namespace Microsoft.AppCenter.Utils
             }
         }
 
-        private static Rectangle WindowsRectToRectangle(dynamic windowsRect)
+        private static Rectangle WindowsRectToRectangle(System.Windows.Rect windowsRect)
         {
             return new Rectangle
             {
@@ -180,7 +184,7 @@ namespace Microsoft.AppCenter.Utils
             };
         }
 
-        private static bool WindowIntersectsWithAnyScreen(dynamic window)
+        private static bool WindowIntersectsWithAnyScreen(System.Windows.Window window)
         {
             var windowBounds = WindowsRectToRectangle(window.RestoreBounds);
             return Screen.AllScreens.Any(screen => screen.Bounds.IntersectsWith(windowBounds));
