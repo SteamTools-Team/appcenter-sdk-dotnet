@@ -37,14 +37,14 @@ namespace Microsoft.AppCenter.Utils
             _managmentClassFactory = factory;
         }
 
-        protected override string GetSdkName()
-        {
-            var sdkName = WpfHelper.IsRunningOnWpf ? "appcenter.wpf" : "appcenter.winforms";
-#if NETCOREAPP3_0
-            sdkName = $"{sdkName}.netcore";
-#endif
-            return sdkName;
-        }
+        protected override string GetSdkName() => "appcenter.wpf.netcore";
+        //        {
+        //            var sdkName =/* WpfHelper.IsRunningOnWpf ?*/ "appcenter.wpf" /*: "appcenter.winforms"*/;
+        //#if NETCOREAPP3_0 || NET5_0_OR_GREATER
+        //            sdkName = $"{sdkName}.netcore";
+        //#endif
+        //            return sdkName;
+        //        }
 
         protected override string GetDeviceModel()
         {
@@ -80,7 +80,7 @@ namespace Microsoft.AppCenter.Utils
                     var manufacturer = (string)managementObject["Manufacturer"];
                     return string.IsNullOrEmpty(manufacturer) || DefaultSystemManufacturer == manufacturer ? null : manufacturer;
                 }
-            } 
+            }
             catch (UnauthorizedAccessException exception)
             {
                 AppCenterLog.Warn(AppCenterLog.LogTag, "Failed to get device OEM name with error: ", exception);

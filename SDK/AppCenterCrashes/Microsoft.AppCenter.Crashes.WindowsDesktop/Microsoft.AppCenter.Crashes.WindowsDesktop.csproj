@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
+    <!--<TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>-->
+    <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>Microsoft.AppCenter.Crashes</RootNamespace>
     <Version>4.1.0-SNAPSHOT</Version>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>

@@ -275,3 +275,7 @@ archives/
 
 # Automatically generated nuspecs
 SDK/**/*.nuspec
+
+# JetBrains Rider
+.idea/
+*.sln.iml
