@@ -9,10 +9,12 @@ using Microsoft.AppCenter.Utils;
 using Microsoft.AppCenter.Windows.Shared.Utils;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace Microsoft.AppCenter.Analytics
 {
+    [SupportedOSPlatform("Windows")]
     public class Analytics : AppCenterService
     {
         #region static
