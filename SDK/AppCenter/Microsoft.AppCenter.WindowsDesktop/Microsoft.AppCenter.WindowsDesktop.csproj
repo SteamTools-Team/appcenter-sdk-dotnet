@@ -2,13 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!--<TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>-->
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Microsoft.AppCenter</RootNamespace>
-    <!--<UseWindowsForms>true</UseWindowsForms>-->
-    <Version>4.1.0-SNAPSHOT</Version>
+    <Version>4.1.0</Version>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
-    <FileVersion>4.1.0.0</FileVersion>
+    <FileVersion>4.1.0</FileVersion>
     <AssemblyName>Microsoft.AppCenter</AssemblyName>
     <DocumentationFile>bin\Microsoft.AppCenter.xml</DocumentationFile>
   </PropertyGroup>
