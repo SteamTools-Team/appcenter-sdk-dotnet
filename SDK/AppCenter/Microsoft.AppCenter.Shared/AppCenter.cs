@@ -182,6 +182,7 @@ namespace Microsoft.AppCenter
         ///     This may be called only once per service per application process lifetime.
         /// </summary>
         /// <param name="services">List of services to use.</param>
+        [System.Runtime.Versioning.SupportedOSPlatform("Windows")]
         public static void Start(params Type[] services)
         {
             PlatformStart(services);
