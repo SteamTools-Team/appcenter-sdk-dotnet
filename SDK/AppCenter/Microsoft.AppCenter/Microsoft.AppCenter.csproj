@@ -18,7 +18,13 @@
     <AssemblyOriginatorKeyFile>..\..\..\appcenter-public-key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Compat\" />
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Microsoft.AppCenter.WindowsDesktop\Compat\PlatformAttributes.cs">
+      <Link>Compat\PlatformAttributes.cs</Link>
+    </Compile>
   </ItemGroup>
   <Target Name="GetPackagingOutputs" />
 </Project>

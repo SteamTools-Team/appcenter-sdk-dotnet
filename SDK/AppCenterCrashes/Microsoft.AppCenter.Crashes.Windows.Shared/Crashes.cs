@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace Microsoft.AppCenter.Crashes
 {
-    [SupportedOSPlatform("Windows")]
     public partial class Crashes : AppCenterService
     {
         private static readonly object CrashesLock = new object();
