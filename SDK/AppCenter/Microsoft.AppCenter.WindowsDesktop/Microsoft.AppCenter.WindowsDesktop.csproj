@@ -4,11 +4,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Microsoft.AppCenter</RootNamespace>
-    <Version>4.1.0</Version>
+    <UseWindowsForms>false</UseWindowsForms>
+    <Version>4.2.0</Version>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
-    <FileVersion>4.1.0</FileVersion>
+    <FileVersion>4.2.0.0</FileVersion>
     <AssemblyName>Microsoft.AppCenter</AssemblyName>
     <DocumentationFile>bin\Microsoft.AppCenter.xml</DocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\appcenter-public-key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
   <Import Project="..\Microsoft.AppCenter.Windows.Shared\Microsoft.AppCenter.Windows.Shared.projitems" Label="Shared" />
   <Import Project="..\Microsoft.AppCenter.Shared\Microsoft.AppCenter.Shared.projitems" Label="Shared" />
@@ -16,8 +20,6 @@
     <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.0.4" />
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net5'))">
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />

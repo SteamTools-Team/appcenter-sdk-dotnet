@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
-
     <RootNamespace>Microsoft.AppCenter.Test.WindowsDesktop</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\appcenter-public-key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
