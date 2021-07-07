@@ -275,9 +275,6 @@ archives/
 
 # Automatically generated nuspecs
 SDK/**/*.nuspec
-SDK/**/*.snk
-Tests/**/*.snk
-*.snk
 
 # JetBrains Rider
 .idea/
